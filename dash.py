@@ -17,6 +17,15 @@ low_fulfillment = (relief["fulfillment_rate"] < 0.8).mean() * 100
 
 non_operational = infra[infra["operational_status"] == "Non-Operational"].shape[0]
 
+st.subheader("Operational Summary")
+
+col1, col2, col3, col4 = st.columns(4)
+
+col1.metric("Total Population Served", f"{total_population_served:,}")
+col2.metric("Average Delivery Delay (hrs)", f"{avg_delay:.2f}")
+col3.metric("% Deliveries < 80% Fulfillment", f"{low_fulfillment:.1f}%")
+col4.metric("Non-Operational Facilities", non_operational)
+
 tab1, tab2 = st.tabs(["Infrastructure Status", "Relief Distribution"])
 
 with tab1:
