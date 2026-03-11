@@ -4,6 +4,15 @@ import plotly.express as px
 
 st.title("Hurricane Maris Relief Operations Dashboard")
 
+st.write(
+"""
+This dashboard provides an operational overview of Hurricane Maris relief efforts
+across Isla Coralina. It allows coordinators to monitor infrastructure status,
+supply distribution performance, and logistical delays in order to prioritize
+recovery resources effectively.
+"""
+)
+
 infra = pd.read_csv("isla_coralina_infrastructure.csv")
 relief = pd.read_csv("isla_coralina_relief_operations.csv")
 
