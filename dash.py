@@ -28,6 +28,20 @@ col4.metric("Non-Operational Facilities", non_operational)
 
 tab1, tab2 = st.tabs(["Infrastructure Status", "Relief Distribution"])
 
+st.sidebar.header("Filters")
+
+municipality_filter = st.sidebar.multiselect(
+    "Select Municipality",
+    options=relief["municipality"].unique(),
+    default=relief["municipality"].unique()
+)
+
+supply_filter = st.sidebar.multiselect(
+    "Select Supply Type",
+    options=relief["supply_type"].unique(),
+    default=relief["supply_type"].unique()
+)
+
 with tab1:
     st.header("Infrastructure Status")
 
