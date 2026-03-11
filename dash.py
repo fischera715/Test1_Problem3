@@ -7,6 +7,7 @@ st.title("Hurricane Maris Relief Operations Dashboard")
 infra = pd.read_csv("isla_coralina_infrastructure.csv")
 relief = pd.read_csv("isla_coralina_relief_operations.csv")
 
+relief["date"] = pd.to_datetime(relief["date"])
 relief["fulfillment_rate"] = relief["quantity_delivered"] / relief["quantity_requested"]
 
 # KPI calculations
@@ -42,9 +43,15 @@ supply_filter = st.sidebar.multiselect(
     default=relief["supply_type"].unique()
 )
 
+date_range = st.sidebar.date_input(
+    "Select Date Range",
+    value=[pd.to_datetime(relief["date"]).min(), pd.to_datetime(relief["date"]).max()]
+)
+
 filtered_relief = relief[
     (relief["municipality"].isin(municipality_filter)) &
-    (relief["supply_type"].isin(supply_filter))
+    (relief["supply_type"].isin(supply_filter)) &
+    (relief["date"].between(pd.to_datetime(date_range[0]), pd.to_datetime(date_range[1])))
 ]
 
 with tab1:
@@ -59,6 +66,18 @@ with tab1:
     )
     
     st.plotly_chart(status_fig)
+
+    infra_status_by_muni = infra.groupby(["municipality", "operational_status"]).size().reset_index(name="count")
+    
+    infra_fig = px.bar(
+        infra_status_by_muni,
+        x="municipality",
+        y="count",
+        color="operational_status",
+        title="Infrastructure Status by Municipality"
+    )
+    
+    st.plotly_chart(infra_fig)
 
 with tab2:
     st.header("Relief Distribution Performance")
