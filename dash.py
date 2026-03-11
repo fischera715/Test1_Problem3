@@ -42,8 +42,22 @@ supply_filter = st.sidebar.multiselect(
     default=relief["supply_type"].unique()
 )
 
+filtered_relief = relief[
+    (relief["municipality"].isin(municipality_filter)) &
+    (relief["supply_type"].isin(supply_filter))
+]
+
 with tab1:
     st.header("Infrastructure Status")
 
 with tab2:
     st.header("Relief Distribution Performance")
+
+    fig = px.box(
+        filtered_relief,
+        x="transport_mode",
+        y="delivery_delay_hours",
+        title="Delivery Delays by Transport Mode"
+    )
+
+    st.plotly_chart(fig)
