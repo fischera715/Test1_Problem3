@@ -83,6 +83,22 @@ with tab2:
         orientation="h",
         title="Supply Gap by Municipality",
         labels={"gap": "Supply Shortage"}
+    )    
+    st.plotly_chart(gap_fig)
+    daily_efficiency = filtered_relief.groupby("date")["fulfillment_rate"].mean().reset_index()
+    
+    time_fig = px.line(
+        daily_efficiency,
+        x="date",
+        y="fulfillment_rate",
+        title="Average Supply Fulfillment Rate Over Time"
     )
     
-    st.plotly_chart(gap_fig)
+    st.plotly_chart(time_fig)
+
+
+
+
+
+
+
