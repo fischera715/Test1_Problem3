@@ -61,3 +61,18 @@ with tab2:
     )
 
     st.plotly_chart(fig)
+
+    gap_data = filtered_relief.groupby("municipality")[["quantity_requested","quantity_delivered"]].sum()
+    
+    gap_data["gap"] = gap_data["quantity_requested"] - gap_data["quantity_delivered"]
+    
+    gap_fig = px.bar(
+        gap_data,
+        y=gap_data.index,
+        x="gap",
+        orientation="h",
+        title="Supply Gap by Municipality",
+        labels={"gap": "Supply Shortage"}
+    )
+    
+    st.plotly_chart(gap_fig)
