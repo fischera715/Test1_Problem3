@@ -4,5 +4,5 @@ import plotly.express as px
 
 st.title("Hurricane Maris Relief Operations Dashboard")
 
-infra = pd.read_csv("infrastructure.csv")
-relief = pd.read_csv("relief_deliveries.csv")
+infra = pd.read_csv("")
+relief = pd.read_csv("isla_coralina_relief_operations.csv")
