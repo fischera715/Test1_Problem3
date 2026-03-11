@@ -50,6 +50,16 @@ filtered_relief = relief[
 with tab1:
     st.header("Infrastructure Status")
 
+    status_counts = infra["operational_status"].value_counts()
+
+    status_fig = px.pie(
+        values=status_counts.values,
+        names=status_counts.index,
+        title="Infrastructure Operational Status"
+    )
+    
+    st.plotly_chart(status_fig)
+
 with tab2:
     st.header("Relief Distribution Performance")
 
