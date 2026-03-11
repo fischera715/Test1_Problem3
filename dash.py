@@ -67,6 +67,15 @@ with tab1:
     
     st.plotly_chart(status_fig)
 
+    st.markdown(
+    """
+    ** Insight: ** Following the hurricane, some critical infrastructure remains partially or fully non-operational.
+    Approximately 22.7% remains partially operational, and 11.3% is non-operational. 
+    This indicates that many communities may face limited access to healthcare, clean water, 
+    or other essential services. Recovery efforts should prioritize restoring these facilities.
+    """
+    )
+
     infra_status_by_muni = infra.groupby(["municipality", "operational_status"]).size().reset_index(name="count")
     
     infra_fig = px.bar(
@@ -91,6 +100,15 @@ with tab2:
 
     st.plotly_chart(fig)
 
+    st.markdown(
+    """
+    ** Insight: ** Boat deliveries experience the longest average delays compared to trucks and helicopters. 
+    This suggests that sea transport may face additional logistical challenges such as docking constraints 
+    or weather conditions. When possible, relief coordinators may prefer trucks or helicopters to reduce 
+    delivery delays.
+    """
+    )
+
     gap_data = filtered_relief.groupby("municipality")[["quantity_requested","quantity_delivered"]].sum()
     
     gap_data["gap"] = gap_data["quantity_requested"] - gap_data["quantity_delivered"]
@@ -104,6 +122,14 @@ with tab2:
         labels={"gap": "Supply Shortage"}
     )    
     st.plotly_chart(gap_fig)
+
+    st.markdown(
+    """
+    ** Insight: ** Some municipalities, like Puerto Nuevo and Costa Sur show significantly larger supply gaps than others. 
+    These locations likely have higher demand or supply chain bottlenecks. Relief planners 
+    should prioritize additional shipments to municipalities with the largest shortages.
+    """
+    )
     daily_efficiency = filtered_relief.groupby("date")["fulfillment_rate"].mean().reset_index()
     
     time_fig = px.line(
@@ -114,6 +140,13 @@ with tab2:
     )
     
     st.plotly_chart(time_fig)
+
+    st.markdown(
+    """
+    ** Insight: ** The fulfillment rate shows fluctuations but generally improves over time, 
+    suggesting that relief coordination becomes more efficient as the response progresses.
+    """
+    )
 
 
 
