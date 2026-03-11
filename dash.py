@@ -143,6 +143,8 @@ with tab2:
         title="Supply Fulfillment Rate Over Time"
     )
 
+    st.plotly_chart(time_fig)
+
     st.markdown(
     """
     **Insight:** The fulfillment rate shows fluctuations but generally improves over time, 
