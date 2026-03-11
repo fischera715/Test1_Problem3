@@ -8,6 +8,8 @@ infra = pd.read_csv("isla_coralina_infrastructure.csv")
 relief = pd.read_csv("isla_coralina_relief_operations.csv")
 
 relief["date"] = pd.to_datetime(relief["date"])
+start_date = relief["date"].min()
+relief["days_after_hurricane"] = (relief["date"] - start_date).dt.days
 relief["fulfillment_rate"] = relief["quantity_delivered"] / relief["quantity_requested"]
 
 # KPI calculations
@@ -43,15 +45,17 @@ supply_filter = st.sidebar.multiselect(
     default=relief["supply_type"].unique()
 )
 
-date_range = st.sidebar.date_input(
-    "Select Date Range",
-    value=[pd.to_datetime(relief["date"]).min(), pd.to_datetime(relief["date"]).max()]
+day_range = st.sidebar.slider(
+    "Days After Hurricane",
+    min_value=int(relief["days_after_hurricane"].min()),
+    max_value=int(relief["days_after_hurricane"].max()),
+    value=(0, int(relief["days_after_hurricane"].max()))
 )
 
 filtered_relief = relief[
     (relief["municipality"].isin(municipality_filter)) &
     (relief["supply_type"].isin(supply_filter)) &
-    (relief["date"].between(pd.to_datetime(date_range[0]), pd.to_datetime(date_range[1])))
+    (relief["days_after_hurricane"].between(day_range[0], day_range[1]))
 ]
 
 with tab1:
@@ -130,16 +134,14 @@ with tab2:
     should prioritize additional shipments to municipalities with the largest shortages.
     """
     )
-    daily_efficiency = filtered_relief.groupby("date")["fulfillment_rate"].mean().reset_index()
+    daily_efficiency = filtered_relief.groupby("days_after_hurricane")["fulfillment_rate"].mean().reset_index()
     
     time_fig = px.line(
         daily_efficiency,
-        x="date",
+        x="days_after_hurricane",
         y="fulfillment_rate",
-        title="Average Supply Fulfillment Rate Over Time"
+        title="Supply Fulfillment Rate Over Time"
     )
-    
-    st.plotly_chart(time_fig)
 
     st.markdown(
     """
